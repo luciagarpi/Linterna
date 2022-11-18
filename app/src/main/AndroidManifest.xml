@@ -5,6 +5,7 @@
 
     //Permiso de acceso al flash del dispositivo
     <uses-permission android:name="android.permission.CAMERA"/>
+    //camera2 ya que camera está obsoleto para esta API
     <uses-feature android:name="android.hardware.camera2" />
 
     <application

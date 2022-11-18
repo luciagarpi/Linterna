@@ -18,11 +18,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-/**
- * Nombre: Lucía García Pardavila
- * DNI: 58003065D
- * Email: lucia.garcia@formacionchios.com
- */
 public class MainActivity extends AppCompatActivity {
     //Código del permiso
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 23;
@@ -37,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toggleButton_encender_apagar = (ToggleButton) findViewById(R.id.toggleButton_encender_apagar);
 
+        //Al pulsar el toggleButton
         toggleButton_encender_apagar.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.CAMERA);
 
+            //Lanza cuadro para aceptar o denegra permisos, llama por si solo al método onRequestPermissionsResult
             if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[] {Manifest.permission.CAMERA},
                         REQUEST_CODE_ASK_PERMISSIONS);
+            //Si los permisos ya han sido concedidos
             } else if (hasWriteContactsPermission == PackageManager.PERMISSION_GRANTED){
                encender_apagar();
 
@@ -76,14 +74,14 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (REQUEST_CODE_ASK_PERMISSIONS == requestCode) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permisos dados :-) ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Permisos concedidos", Toast.LENGTH_LONG).show();
                 try {
                     encender_apagar();
                 } catch (CameraAccessException e) {
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(this, "Permisos denegados :-( ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Permisos denegados", Toast.LENGTH_LONG).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -96,10 +94,14 @@ public class MainActivity extends AppCompatActivity {
      */
     public void encender_apagar() throws CameraAccessException {
         camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        //El 0 es la cámara externa, el 1 la interna
         String cameraId = camManager.getCameraIdList()[0];
+        //Si está pulsado
         if(toggleButton_encender_apagar.isChecked()) {
+            //Se enciende el flash externo
             camManager.setTorchMode(cameraId, true);
-        } else {
+        } else { //Sino
+            //Se apaga
             camManager.setTorchMode(cameraId, false);
         }
     }//Fin encender_apagar
